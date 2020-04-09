@@ -1,0 +1,107 @@
+﻿@model List<CFT.Models.Chat.Message>
+@{
+	ViewData["Title"] = "Чат";
+}
+
+<div class="container">
+	<div class="col-md-12 mt-4 p-0">
+		<div id="chatroom" class="mb-2">
+			@foreach (var message in Model)
+			{
+				<div class="mt-3 message">
+					<div class="d-flex">
+						<div class="d-flex align-items-start">
+							<img src="data:image/jpeg;base64,@Convert.ToBase64String(message.Author.Avatar)"/>
+						</div>
+						<div class="text-content">
+							<div class="d-flex justify-content-between border-bottom align-items-end">
+								<b class="w-100">@message.Author.GetFullName()</b>
+								<span class="date">@message.CreatedDate.ToString("dd/MM hh:mm")</span>
+							</div>
+							<div class="d-flex">
+								<span class="text">
+									@message.Text
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+<div id="inputForm">
+	<div class="d-flex justify-content-center mt-4">
+		<input type="text" class="form-control col-md-6 mb-2 mr-sm-2" id="message" placeholder="Введите сообщение">
+		<button type="button" id="sendBtn" class="btn btn-dark col-md-2 mb-2">Отправить</button>
+	</div>
+</div>
+
+<script>
+	$("#chatroom").animate({
+		scrollTop: document.getElementById('chatroom').scrollHeight
+	}, 0);
+
+	let hubUrl = 'https://localhost:5001/chat';
+	const hubConnection = new signalR.HubConnectionBuilder()
+		.withUrl(hubUrl)
+		.build();
+
+	hubConnection.on('Send', function (message, userName, createdDate, avatar) {
+		//$("#chatroom").append(`<div class="mt-2">
+		//			<div class="d-flex">
+		//				<b class="border-bottom w-100">${userName}</b>
+		//			</div>
+		//			<div class="d-flex justify-content-between">
+		//				<span>
+		//				   ${message}
+		//				</span>
+		//				<span id="date">
+		//					${createdDate}
+		//				</span>
+		//			</div>
+		//		</div>`);
+		$("#chatroom").append(`
+				<div class="mt-3 message">
+					<div class="d-flex">
+						<div class="d-flex align-items-start">
+							<img src="${avatar}"/>
+						</div>
+						<div class="text-content">
+							<div class="d-flex justify-content-between border-bottom align-items-end">
+								<b class="w-100">${userName}</b>
+								<span class="date">${createdDate}</span>
+							</div>
+							<div class="d-flex">
+								<span class="text">
+									${message}
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+`);
+		$("#message").val("");
+
+		$("#chatroom").animate({
+			scrollTop: document.getElementById('chatroom').scrollHeight
+		}, 1000);
+	});
+
+	document.getElementById("sendBtn").addEventListener("click", function () {
+		let message = document.getElementById("message").value;
+		hubConnection.invoke('Send', message);
+	});
+
+	hubConnection.start();
+
+	$("#inputForm input").focus();
+
+	$("#inputForm input").keyup(function (e) {
+		var code = e.key;
+		if (code === "Enter") {
+			e.preventDefault();
+			$("#sendBtn").click();
+		}
+	});
+</script>

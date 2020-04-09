@@ -1,0 +1,31 @@
+﻿@model CFT.ViewModels.Account.RegisterViewModel
+
+<form asp-action="Register" asp-controller="Account" asp-anti-forgery="true" class="text-center border border-light p-3 col-md-6 mr-auto ml-auto mt-3 mb-5" method="post" enctype="multipart/form-data">
+	<div class="validation" asp-validation-summary="All"></div>
+	<p class="h4 mb-4 mt-2">Регистрация</p>
+
+	<div class="form-row mb-4">
+		<div class="col">
+			<input type="text" class="form-control" placeholder="Имя" asp-for="FirstName">
+		</div>
+		<div class="col">
+			<input type="text" class="form-control" placeholder="Фамилия" asp-for="LastName">
+		</div>
+	</div>
+
+	<input type="text" class="form-control mb-4" placeholder="Логин" asp-for="Login">
+
+	<input type="password" class="form-control mb-4" placeholder="Пароль" aria-describedby="defaultRegisterFormPasswordHelpBlock" asp-for="Password">
+	
+	<input type="password" class="form-control mb-4" placeholder="Повторите пароль" aria-describedby="defaultRegisterFormPasswordHelpBlock" asp-for="ConfirmPassword">
+
+	<div class="file-input text-left">
+		<div class="custom-file">
+			<input type="file" class="custom-file-input" id="headerImageSource" asp-for="@Model.Avatar">
+			<label class="custom-file-label" for="headerImageSource" aria-describedby="Upload">Аватар</label>
+		</div>
+	</div>
+
+	<button class="btn btn-info my-4 btn-block" type="submit">Регистрация</button>
+	<hr>
+</form>
