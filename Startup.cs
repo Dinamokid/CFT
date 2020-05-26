@@ -42,7 +42,8 @@ namespace CFT
 							  builder =>
 							  {
 								  builder.WithOrigins("https://localhost:5001/chat",
-													  "https://cft-dinamokid-chat.herokuapp.com/chat");
+													  "https://cft-dinamokid-chat.herokuapp.com/chat",
+													  "https://cft-dinamokid-chat.herokuapp.com/chat/negotiate?negotiateVersion=1");
 							  });
 		});
 
