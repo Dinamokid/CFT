@@ -37,15 +37,7 @@ namespace CFT
 				});
 
 			services.AddCors(options =>
-		{
-			options.AddPolicy(name: AllowSpecificOrigins,
-							  builder =>
-							  {
-								  builder.WithOrigins("https://localhost:5001/chat",
-													  "https://cft-dinamokid-chat.herokuapp.com/chat",
-													  "https://cft-dinamokid-chat.herokuapp.com/chat/negotiate?negotiateVersion=1");
-							  });
-		});
+                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 			services.AddSignalR();
 
@@ -56,6 +48,8 @@ namespace CFT
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
+			app.UseCors(AllowSpecificOrigins);
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
@@ -66,8 +60,6 @@ namespace CFT
 			}
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
-
-			app.UseCors(AllowSpecificOrigins);
 
 			app.UseRouting();
 
