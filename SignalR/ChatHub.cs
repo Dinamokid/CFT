@@ -10,6 +10,7 @@ namespace CFT.SignalR
 	{
         public async Task Send(string message)
         {
+            if (string.IsNullOrEmpty(message)) return;
             var user = GetCurrentUser();
 
             DbContext.Messages.Add(new Message()

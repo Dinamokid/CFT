@@ -44,7 +44,7 @@
 </environment>
 <environment names="Production">
 	<script>
-		var hubUrl = 'https://cft-dinamokid-chat.herokuapp.com/';
+		var hubUrl = 'https://cft-dinamokid-chat.herokuapp.com/chat';
 	</script>
 </environment>
 
@@ -87,7 +87,9 @@
 
 	document.getElementById("sendBtn").addEventListener("click", function () {
 		let message = document.getElementById("message").value;
-		hubConnection.invoke('Send', message);
+		if (message !== "") {
+			hubConnection.invoke('Send', message);
+		}
 	});
 
 	hubConnection.start();
