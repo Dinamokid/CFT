@@ -13,6 +13,8 @@ namespace CFT
 {
 	public class Startup
 	{
+		readonly string AllowSpecificOrigins = "AllowSpecificOrigins";
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -34,14 +36,15 @@ namespace CFT
 					options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
 				});
 
-			services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
-						{
-							builder
-								.AllowAnyMethod()
-								.AllowAnyHeader()
-								.AllowAnyOrigin()
-								.AllowCredentials();
-						}));
+			services.AddCors(options =>
+		{
+			options.AddPolicy(name: AllowSpecificOrigins,
+							  builder =>
+							  {
+								  builder.WithOrigins("https://localhost:5001/chat",
+													  "https://cft-dinamokid-chat.herokuapp.com/chat");
+							  });
+		});
 
 			services.AddSignalR();
 
@@ -63,7 +66,7 @@ namespace CFT
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
-			app.UseCors("CorsPolicy");
+			app.UseCors(AllowSpecificOrigins);
 
 			app.UseRouting();
 
