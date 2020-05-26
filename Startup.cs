@@ -25,12 +25,11 @@ namespace CFT
 			services.AddRazorPages()
 				.AddRazorRuntimeCompilation();
 
-			string connection = Configuration.GetConnectionString("DefaultConnection");
-			services.AddDbContext<CftDbContext>(options =>
-				options.UseSqlServer(connection));
+			services.AddEntityFrameworkNpgsql().AddDbContext<CftDbContext>(opt =>
+								opt.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
 			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(options => 
+				.AddCookie(options =>
 				{
 					options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
 				});
@@ -58,7 +57,7 @@ namespace CFT
 			app.UseRouting();
 
 			app.UseAuthentication();
-			app.UseAuthorization(); 
+			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{

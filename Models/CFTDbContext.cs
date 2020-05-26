@@ -10,8 +10,6 @@ namespace CFT.Models
 		public DbSet<Message> Messages { get; set; }
 		public CftDbContext(DbContextOptions<CftDbContext> options)
 			: base(options)
-		{
-			Database.EnsureCreated();
-		}
+		{}
 	}
 }
