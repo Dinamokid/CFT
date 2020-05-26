@@ -13,8 +13,6 @@ namespace CFT
 {
 	public class Startup
 	{
-		readonly string AllowSpecificOrigins = "AllowSpecificOrigins";
-
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -37,7 +35,12 @@ namespace CFT
 				});
 
 			services.AddCors(options =>
-                options.AddDefaultPolicy(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+			{
+				options.AddDefaultPolicy(builder =>
+				{
+					builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+				});
+			});
 
 			services.AddSignalR();
 
@@ -48,7 +51,7 @@ namespace CFT
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseCors(AllowSpecificOrigins);
+
 
 			if (env.IsDevelopment())
 			{
@@ -58,6 +61,7 @@ namespace CFT
 			{
 				app.UseHsts();
 			}
+
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 
@@ -65,6 +69,12 @@ namespace CFT
 
 			app.UseAuthentication();
 			app.UseAuthorization();
+
+			app.UseCors(builder =>
+						{
+							builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+						});
+
 
 			app.UseEndpoints(endpoints =>
 			{
