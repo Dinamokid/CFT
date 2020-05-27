@@ -34,13 +34,12 @@ namespace CFT
 					options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
 				});
 
-			services.AddCors(options =>
+			services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
 			{
-				options.AddDefaultPolicy(builder =>
-				{
-					builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-				});
-			});
+				builder.AllowAnyOrigin()
+			   .AllowAnyMethod()
+			   .AllowAnyHeader();
+			}));
 
 			services.AddSignalR();
 
@@ -67,14 +66,9 @@ namespace CFT
 
 			app.UseRouting();
 
+			app.UseCors("CorsPolicy");
 			app.UseAuthentication();
 			app.UseAuthorization();
-
-			app.UseCors(builder =>
-						{
-							builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-						});
-
 
 			app.UseEndpoints(endpoints =>
 			{
