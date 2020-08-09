@@ -2,6 +2,5 @@
 
 [Heroku delopyment](https://cft-dinamokid-chat.herokuapp.com/)
 
-Login: admin
-
+Login: admin<br>
 Pass: admin
